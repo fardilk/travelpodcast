@@ -51,8 +51,16 @@ jobs:
           echo "Testing SSH connectivity to $DEV_USER@$DEV_HOST"
           ssh -o StrictHostKeyChecking=no -i /tmp/deploy_key $DEV_USER@$DEV_HOST "echo ✅ SSH OK"
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install dependencies (ci with fallback)
+        shell: bash
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "Running npm ci..."
+            npm ci || (echo "npm ci failed, fallback to npm install" && npm install)
+          else
+            echo "No package-lock.json, using npm install"
+            npm install
+          fi
 
       - name: Build project
         run: npm run build
