@@ -1,0 +1,88 @@
+name: Deploy dev.langkahliar.id
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Assert secrets
+        shell: bash
+        env:
+          DEV_HOST: ${{ secrets.DEV_HOST }}
+          DEV_USER: ${{ secrets.DEV_USER }}
+          DEV_KEY_B64: ${{ secrets.DEV_KEY_B64 }}
+        run: |
+          set -e
+          for n in DEV_HOST DEV_USER DEV_KEY_B64; do
+            [ -n "${!n}" ] && echo "✅ $n present" || { echo "❌ Missing: $n"; exit 1; }
+          done
+
+      - name: Prepare SSH key (decode base64 → file)
+        shell: bash
+        env:
+          DEV_KEY_B64: ${{ secrets.DEV_KEY_B64 }}
+        run: |
+          set -euo pipefail
+          printf "%s" "$DEV_KEY_B64" | tr -d '\r\n ' | base64 --decode --ignore-garbage > /tmp/deploy_key
+          chmod 600 /tmp/deploy_key
+          ssh-keygen -y -f /tmp/deploy_key >/dev/null 2>&1
+          cp /tmp/deploy_key "$GITHUB_WORKSPACE/deploy_key"
+          chmod 644 "$GITHUB_WORKSPACE/deploy_key"
+
+      - name: Test SSH connectivity
+        env:
+          DEV_HOST: ${{ secrets.DEV_HOST }}
+          DEV_USER: ${{ secrets.DEV_USER }}
+        run: |
+          echo "Testing SSH connectivity to $DEV_USER@$DEV_HOST"
+          ssh -o StrictHostKeyChecking=no -i /tmp/deploy_key $DEV_USER@$DEV_HOST "echo ✅ SSH OK"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+        # NOTE: by default Vite build output = dist/
+        # jika pakai Next.js static export, ganti output jadi out/
+
+      - name: Clean remote dist
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USER }}
+          key_path: /github/workspace/deploy_key
+          script: |
+            rm -rf /var/www/langkahliar-dev/dist
+            mkdir -p /var/www/langkahliar-dev/dist
+
+      - name: Upload build to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USER }}
+          key_path: /github/workspace/deploy_key
+          source: "dist/**"             # ganti ke "out/**" kalau Next export
+          target: "/var/www/langkahliar-dev/dist"
+          strip_components: 1
+
+      - name: Reload Nginx
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USER }}
+          key_path: /github/workspace/deploy_key
+          script: sudo nginx -t && sudo systemctl reload nginx
