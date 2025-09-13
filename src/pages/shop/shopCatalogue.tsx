@@ -9,7 +9,7 @@ export default function ShopLanding() {
         </div>
         <div className="bg-neutral-900 text-white">
           <div className="mx-auto max-w-7xl px-4 py-6 flex items-center justify-center">
-            <h1 className="text-2xl md:text-3xl font-bold tracking-wider">SUARA PEJALAN SHOP</h1>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-wider">LANGKAH LIAR SHOP</h1>
           </div>
         </div>
       </div>

@@ -1,19 +1,19 @@
 
-import { getEntriesByProvince } from '@/data/encyclopedia'
-const entries = getEntriesByProvince('sumatera')
+import { getEntriesByProvince } from '@/data/artikel'
+const items = getEntriesByProvince('sumatera')
 
 export default function SumateraEntries() {
   return (
     <main className="mx-auto max-w-4xl px-4 py-16">
-      <h1 className="text-3xl font-semibold tracking-tight">Ensiklopedi Sumatera</h1>
-      <ul className="mt-8 space-y-4">
-        {entries.map(e => (
-          <li key={e.id} className="rounded-md border p-4 hover:bg-accent">
-            <h3 className="font-medium">{e.title}</h3>
-            <p className="mt-1 text-sm text-muted-foreground">{e.snippet}</p>
-          </li>
+      <h1 className="text-3xl font-semibold tracking-tight">Sumatera — Artikel</h1>
+      <div className="mt-8 grid grid-cols-1 gap-4">
+        {items.map((it) => (
+          <article key={it.id} className="rounded-lg border p-4 bg-card">
+            <h3 className="font-medium">{it.title}</h3>
+            <p className="mt-2 text-sm text-muted-foreground">{it.snippet}</p>
+          </article>
         ))}
-      </ul>
+      </div>
     </main>
   )
 }

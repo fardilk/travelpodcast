@@ -58,6 +58,29 @@
   }
 }
 
+/* waveform animation utilities */
+@layer utilities {
+  .wf-anim {
+    transform-origin: 0 0;
+    animation-name: wf-move;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    /* duration set per-layer via --wf-dur, falls back to 2s */
+    animation-duration: var(--wf-dur, 2s);
+    will-change: transform, opacity;
+    mix-blend-mode: screen;
+  }
+
+  @keyframes wf-move {
+    from { transform: translateX(0%); }
+    to { transform: translateX(-20%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wf-anim { animation: none !important; }
+  }
+}
+
 @layer base {
   * {
     @apply border-border;

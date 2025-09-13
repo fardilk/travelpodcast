@@ -1,11 +1,13 @@
 import { podcastEpisodes } from '@/data/podcasts'
 import { getTripsByType } from '@/data/trips'
-import { getEntriesByProvince } from '@/data/encyclopedia'
+import { getEntriesByProvince } from '@/data/artikel'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { ImageCard } from '@/components/common/ImageCard'
 import { Headphones } from 'lucide-react'
 import React from 'react'
+import Meta from '@/components/Meta'
+import VideoBanner from '@/components/layout/VideoBanner'
 
 function SectionWrapper({ children, index }: { children: React.ReactNode; index: number }) {
 	const palette = [
@@ -81,7 +83,7 @@ function UpcomingTripsPreview() {
 	)
 }
 
-function EncyclopediaPreview() {
+function ArtikelPreview() {
 	const sample = [
 		...getEntriesByProvince('jawa').slice(0, 2),
 		...getEntriesByProvince('sumatera').slice(0, 1)
@@ -144,6 +146,8 @@ function PartnerCTA() {
 export default function HomePage() {
 	return (
 		<>
+			<Meta pageKey="home" />
+			<VideoBanner />
 			<SectionWrapper index={0}>
 			<SectionHeader eyebrow="Listen" title="Latest from the Podcast" cta={<Button variant="outline" size="sm" asChild><a href="/podcasts">All Episodes</a></Button>} />
 				<PodcastPreview />
@@ -153,8 +157,8 @@ export default function HomePage() {
 				<UpcomingTripsPreview />
 			</SectionWrapper>
 			<SectionWrapper index={2}>
-			<SectionHeader eyebrow="Reference" title="From the Ensiklopedi" cta={<Button variant="outline" size="sm" asChild><a href="/encyclopedia">Browse All</a></Button>} />
-				<EncyclopediaPreview />
+			<SectionHeader eyebrow="Reference" title="From the Artikel" cta={<Button variant="outline" size="sm" asChild><a href="/artikel">Browse All</a></Button>} />
+				<ArtikelPreview />
 			</SectionWrapper>
 			<SectionWrapper index={3}>
 			<SectionHeader eyebrow="Shop" title="Curated Collections" cta={<Button variant="outline" size="sm" asChild><a href="/shop">Visit Shop</a></Button>} />

@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { SiteLayout } from '@/layout/SiteLayout'
 import HomePage from '@/pages/home'
 import { ErrorBoundary } from './ErrorBoundary'
@@ -14,10 +14,10 @@ const TripsLanding = lazy(()=>import('@/pages/trips'))
 const HikingTrips = lazy(()=>import('@/pages/trips/hiking'))
 const SailingTrips = lazy(()=>import('@/pages/trips/sailing'))
 const HeritageTrips = lazy(()=>import('@/pages/trips/heritage'))
-const EncyclopediaLanding = lazy(()=>import('@/pages/encyclopedia'))
-const JawaEntries = lazy(()=>import('@/pages/encyclopedia/jawa'))
-const SumateraEntries = lazy(()=>import('@/pages/encyclopedia/sumatera'))
-const NusaTenggaraEntries = lazy(()=>import('@/pages/encyclopedia/nusa-tenggara'))
+const ArtikelLanding = lazy(()=>import('@/pages/artikel'))
+const JawaEntries = lazy(()=>import('@/pages/artikel/jawa'))
+const SumateraEntries = lazy(()=>import('@/pages/artikel/sumatera'))
+const NusaTenggaraEntries = lazy(()=>import('@/pages/artikel/nusa-tenggara'))
 const InquiryLanding = lazy(()=>import('@/pages/inquiry'))
 const ShareStory = lazy(()=>import('@/pages/inquiry/share-story'))
 const PrivateTripInquiry = lazy(()=>import('@/pages/inquiry/private-trip'))
@@ -45,10 +45,12 @@ export default function AppRouter() {
               <Route path="/trips/hiking" element={<HikingTrips />} />
               <Route path="/trips/sailing" element={<SailingTrips />} />
               <Route path="/trips/heritage" element={<HeritageTrips />} />
-              <Route path="/encyclopedia" element={<EncyclopediaLanding />} />
-              <Route path="/encyclopedia/jawa" element={<JawaEntries />} />
-              <Route path="/encyclopedia/sumatera" element={<SumateraEntries />} />
-              <Route path="/encyclopedia/nusa-tenggara" element={<NusaTenggaraEntries />} />
+              <Route path="/artikel" element={<ArtikelLanding />} />
+              {/* legacy route - redirect to new /artikel path */}
+              <Route path="/encyclopedia" element={<Navigate to="/artikel" replace />} />
+              <Route path="/artikel/jawa" element={<JawaEntries />} />
+              <Route path="/artikel/sumatera" element={<SumateraEntries />} />
+              <Route path="/artikel/nusa-tenggara" element={<NusaTenggaraEntries />} />
               <Route path="/inquiry" element={<InquiryLanding />} />
               <Route path="/inquiry/share-story" element={<ShareStory />} />
               <Route path="/inquiry/private-trip" element={<PrivateTripInquiry />} />
