@@ -1,5 +1,4 @@
 import React from 'react'
-import { Helmet } from 'react-helmet-async'
 import { metaTitle, metaDescription, metaImage, metaFavicon, pageMetaSuggestions } from '@/data/meta'
 import { useLocation } from 'react-router-dom'
 
@@ -19,24 +18,45 @@ export const Meta: React.FC<MetaProps> = ({ pageKey, title, description, image, 
   const finalImage = image ?? metaImage
   const canonical = typeof window !== 'undefined' ? `${window.location.origin}${loc.pathname}` : ''
 
-  return (
-    <Helmet>
-      <title>{finalTitle}</title>
-      <link rel="icon" href={metaFavicon} />
-      <meta name="description" content={finalDescription} />
-      {focusKeyphrase && <meta name="keywords" content={focusKeyphrase} />}
+  React.useEffect(() => {
+    document.title = finalTitle
+    const setMeta = (name: string, content: string | null, attr = 'name') => {
+      if (!content) return
+      let el = document.querySelector(`meta[${attr}="${name}"]`) as HTMLMetaElement | null
+      if (!el) {
+        el = document.createElement('meta')
+        el.setAttribute(attr, name)
+        document.head.appendChild(el)
+      }
+      el.content = content
+    }
 
-      <meta property="og:title" content={finalTitle} />
-      <meta property="og:description" content={finalDescription} />
-      <meta property="og:image" content={finalImage} />
-      {canonical && <meta property="og:url" content={canonical} />}
+    setMeta('description', finalDescription)
+    if (focusKeyphrase) setMeta('keywords', focusKeyphrase)
 
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={finalTitle} />
-      <meta name="twitter:description" content={finalDescription} />
-      <meta name="twitter:image" content={finalImage} />
-    </Helmet>
-  )
+    setMeta('og:title', finalTitle, 'property')
+    setMeta('og:description', finalDescription, 'property')
+    setMeta('og:image', finalImage, 'property')
+    if (canonical) setMeta('og:url', canonical, 'property')
+
+    setMeta('twitter:card', 'summary_large_image')
+    setMeta('twitter:title', finalTitle)
+    setMeta('twitter:description', finalDescription)
+    setMeta('twitter:image', finalImage)
+
+    // favicon
+    if (metaFavicon) {
+      let link = document.querySelector('link[rel~="icon"]') as HTMLLinkElement | null
+      if (!link) {
+        link = document.createElement('link')
+        link.rel = 'icon'
+        document.head.appendChild(link)
+      }
+      link.href = metaFavicon
+    }
+  }, [finalTitle, finalDescription, finalImage, focusKeyphrase, canonical])
+
+  return null
 }
 
 export default Meta
