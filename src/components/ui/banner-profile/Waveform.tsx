@@ -1,5 +1,5 @@
  
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 
 type AllowedLayers = 1 | 2 | 3
 
@@ -14,14 +14,25 @@ type WaveformProps = {
 // small utilities
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v))
 
-const buildPath = (amp: number) => {
-  // a compact, readable generation of the path used for the visual waveform
+const buildRandomHeartbeatPath = (amp: number) => {
   const center = 30
-  const span = 20 * amp
-  // repeated C segments across the viewbox
-  const seg = (x1: number, x2: number, x3: number) => `C${x1} ${center - span} ${x2} ${center + span} ${x3} ${center}`
+  const span = 25 * amp
+  const width = 600
+  const step = 50
 
-  return `M0 ${center} ${seg(50,100,150)} ${seg(200,250,300)} ${seg(350,400,450)} ${seg(500,550,600)}`
+  let path = `M0 ${center}`
+  let x = 0
+
+  while (x < width) {
+    const nextX = Math.min(width, x + step + Math.random() * 30)
+    const dir = Math.random() > 0.5 ? -1 : 1
+    const height = span * (0.7 + Math.random() * 1.2)
+    path += ` L${nextX} ${center + dir * height} L${nextX + 20} ${center}`
+    x = nextX + 20
+  }
+
+  path += ` L${width} ${center}`
+  return path
 }
 
 const toDurationSec = (frequency: number) => {
@@ -43,8 +54,19 @@ export default function Waveform({
   const waveLayers = useMemo(() => clamp(Math.floor(Number(layers || 1)), 1, 3) as AllowedLayers, [layers])
 
   // derived values memoized
-  const path = useMemo(() => buildPath(amp), [amp])
   const basePeriod = useMemo(() => toDurationSec(frequency), [frequency])
+  // regenerate a randomized heartbeat path each beat so spikes shift over time
+  const prefersReduced = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const [path, setPath] = useState(() => buildRandomHeartbeatPath(amp))
+
+  useEffect(() => {
+    if (prefersReduced) return
+    setPath(buildRandomHeartbeatPath(amp))
+    const id = setInterval(() => {
+      setPath(buildRandomHeartbeatPath(amp))
+    }, basePeriod * 1000)
+    return () => clearInterval(id)
+  }, [amp, basePeriod, prefersReduced])
 
   // build a declarative configuration per layer
   const layerConfigs = useMemo(() => {
@@ -57,8 +79,6 @@ export default function Waveform({
         idx,
         opacity,
         duration,
-        strokeDasharray: 240,
-        strokeDashoffset: -200,
       }
     })
   }, [waveLayers, basePeriod])
@@ -103,8 +123,6 @@ export default function Waveform({
                 strokeWidth={strokeW}
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeDasharray={cfg.strokeDasharray}
-                strokeDashoffset={cfg.strokeDashoffset}
                 filter="url(#wf-glow)"
               />
             </g>

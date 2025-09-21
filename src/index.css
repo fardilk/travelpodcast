@@ -60,24 +60,26 @@
 
 /* waveform animation utilities */
 @layer utilities {
-  .wf-anim {
-    transform-origin: 0 0;
-    animation-name: wf-move;
-    animation-timing-function: linear;
+  .wf-anim path {
+    transform-origin: 0 50%;
+    animation-name: heartbeat;
+    animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
-    /* duration set per-layer via --wf-dur, falls back to 2s */
-    animation-duration: var(--wf-dur, 2s);
+    animation-duration: var(--wf-dur, 1.8s);
     will-change: transform, opacity;
     mix-blend-mode: screen;
   }
 
-  @keyframes wf-move {
-    from { transform: translateX(0%); }
-    to { transform: translateX(-20%); }
+  @keyframes heartbeat {
+    0%   { transform: scaleY(1); }
+    20%  { transform: scaleY(1.4); }
+    35%  { transform: scaleY(0.7); }
+    55%  { transform: scaleY(1.25); }
+    100% { transform: scaleY(1); }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .wf-anim { animation: none !important; }
+    .wf-anim path { animation: none !important; }
   }
 }
 
