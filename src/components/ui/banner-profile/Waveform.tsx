@@ -8,16 +8,17 @@ type WaveformProps = {
   amplitude?: number // 0..1 relative vertical scale
   thickness?: number // stroke width in px
   layers?: AllowedLayers
+  /** width of the waveform in viewBox coordinates; default trimmed by 60px */
+  width?: number
   className?: string
 }
 
 // small utilities
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v))
 
-const buildRandomHeartbeatPath = (amp: number) => {
+const buildRandomHeartbeatPath = (amp: number, width = 600) => {
   const center = 30
   const span = 25 * amp
-  const width = 600
   const step = 50
 
   let path = `M0 ${center}`
@@ -46,6 +47,7 @@ export default function Waveform({
   amplitude = 0.35,
   thickness = 2,
   layers = 2,
+  width = 540,
   className = '',
 }: WaveformProps) {
   // clamp inputs to safe ranges
@@ -57,16 +59,16 @@ export default function Waveform({
   const basePeriod = useMemo(() => toDurationSec(frequency), [frequency])
   // regenerate a randomized heartbeat path each beat so spikes shift over time
   const prefersReduced = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  const [path, setPath] = useState(() => buildRandomHeartbeatPath(amp))
+  const [path, setPath] = useState(() => buildRandomHeartbeatPath(amp, width))
 
   useEffect(() => {
     if (prefersReduced) return
-    setPath(buildRandomHeartbeatPath(amp))
+    setPath(buildRandomHeartbeatPath(amp, width))
     const id = setInterval(() => {
-      setPath(buildRandomHeartbeatPath(amp))
+      setPath(buildRandomHeartbeatPath(amp, width))
     }, basePeriod * 1000)
     return () => clearInterval(id)
-  }, [amp, basePeriod, prefersReduced])
+  }, [amp, basePeriod, prefersReduced, width])
 
   // build a declarative configuration per layer
   const layerConfigs = useMemo(() => {
@@ -85,7 +87,7 @@ export default function Waveform({
 
   return (
     <div className={`w-full h-6 overflow-hidden ${className}`}>
-      <svg viewBox="0 0 600 60" className="w-full h-6" preserveAspectRatio="none" aria-hidden>
+    <svg viewBox={`0 0 ${width} 60`} className="w-full h-6" preserveAspectRatio="xMinYMid meet" aria-hidden>
         <defs>
           {/* soft glow filter */}
           <filter id="wf-glow" x="-50%" y="-50%" width="200%" height="200%">
