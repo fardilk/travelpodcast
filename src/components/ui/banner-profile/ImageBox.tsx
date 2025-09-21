@@ -30,7 +30,7 @@ export default function ImageBox({
 
   return (
     <div className={`relative overflow-hidden ${widthClass} ${heightClass} ${shapeClass} ring-2 ring-transparent ${className}`} style={style}>
-      <img src={src} alt={alt} className="w-full h-full object-cover" />
+  <img src={src} alt={alt} className="w-full h-full object-cover transform transition-transform duration-300" />
       {children}
     </div>
   )

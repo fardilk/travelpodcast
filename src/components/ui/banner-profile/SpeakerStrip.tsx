@@ -10,9 +10,9 @@ type Speaker = {
 }
 
 const defaultSpeakers: Speaker[] = [
-  { id: 's1', name: 'Arif', role: 'Mountaineer', img: '/green-bg.png', href: '#' },
-  { id: 's2', name: 'Sari', role: 'Travel Vlogger', img: '/green-bg.png', href: '#' },
-  { id: 's3', name: 'Budi', role: 'Cultural Guide', img: '/green-bg.png', href: '#' },
+  { id: 's1', name: 'Arif', role: 'Mountaineer', img: '/podcaster/podcaster-1.png', href: '#' },
+  { id: 's2', name: 'Sari', role: 'Travel Vlogger', img: '/podcaster/podcaster-2.png', href: '#' },
+  { id: 's3', name: 'Budi', role: 'Cultural Guide', img: '/podcaster/podcaster-3.png', href: '#' },
 ]
 
 export default function SpeakerStrip({ items = defaultSpeakers }: { items?: Speaker[] }) {
@@ -46,7 +46,7 @@ export default function SpeakerStrip({ items = defaultSpeakers }: { items?: Spea
             <a
               key={s.id}
               href={s.href ?? '#'}
-              className="relative z-10 focus:z-20 group flex-1"
+              className="relative z-10 focus:z-20 group flex-1 speaker-link"
               aria-label={`${s.name}${s.role ? ` — ${s.role}` : ''}`}
               tabIndex={0}
               onClick={(e) => {

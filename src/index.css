@@ -111,4 +111,24 @@
     color: #f1f5f9;
   }
   /* usage: md:nav-bg-dusty-black */
+
+  /* SpeakerStrip interactions: smooth zoom on hover and stronger zoom when focused/clicked + hovered */
+  .speaker-link img {
+    transition: transform 260ms cubic-bezier(.2,.8,.2,1);
+    transform-origin: center center;
+  }
+
+  .speaker-link:hover img {
+    transform: scale(1.03);
+  }
+
+  /* when the link is focused (clicked or keyboard), allow stronger zoom on hover */
+  .speaker-link:focus-within img {
+    transform: scale(1.06);
+  }
+
+  /* if both hovered and focused, apply an even stronger zoom */
+  .speaker-link:focus-within:hover img {
+    transform: scale(1.12);
+  }
 }

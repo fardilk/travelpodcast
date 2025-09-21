@@ -20,6 +20,7 @@ export default function VideoBanner() {
           </div>
           <div className="md:col-span-1">
             <div className="mt-4">
+              <div className="text-sm uppercase tracking-wider text-red-400 font-semibold mb-2">Sedang Tayang</div>
               <SpeakerStrip />
             </div>
           </div>
