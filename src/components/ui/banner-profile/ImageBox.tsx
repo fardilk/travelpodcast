@@ -15,14 +15,14 @@ type ImageBoxProps = {
 export default function ImageBox({
   src = '/green-bg.png',
   alt = '',
-  heightClass = 'h-36',
+  heightClass = 'h-52',
   widthClass = 'w-full',
-  shapeClass = 'rounded-full',
+  shapeClass = 'rounded-xl',
   className = '',
   children,
 }: ImageBoxProps) {
   return (
-  <div className={`relative overflow-hidden ${widthClass} ${heightClass} ${shapeClass} ring-2 ring-transparent ${className}`}>
+    <div className={`relative overflow-hidden ${widthClass} ${heightClass} ${shapeClass} ring-2 ring-transparent ${className}`}>
       <img src={src} alt={alt} className="w-full h-full object-cover" />
       {children}
     </div>

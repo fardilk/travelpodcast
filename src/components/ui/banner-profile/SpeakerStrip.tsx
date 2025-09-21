@@ -59,9 +59,7 @@ export default function SpeakerStrip({ items = defaultSpeakers }: { items?: Spea
                 <ImageBox
                   src={s.img}
                   alt={s.name}
-                  heightClass="h-36"
                   widthClass="w-full"
-                  shapeClass="rounded-lg"
                   className="ring-2 ring-transparent group-focus-within:ring-neutral-300 ring-offset-2 transform transition-all duration-200 group-hover:scale-105 shadow-md"
                 >
                   {s.role && (
