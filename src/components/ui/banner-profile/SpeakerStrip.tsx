@@ -42,7 +42,7 @@ export default function SpeakerStrip({ items = defaultSpeakers }: { items?: Spea
     <div className="mt-3" onKeyDown={onKeyDown} ref={containerRef}>
       <div className="w-full">
         <div className="flex gap-4 items-stretch">
-          {items.map((s) => (
+          {items.map((s, i) => (
             <a
               key={s.id}
               href={s.href ?? '#'}
@@ -60,6 +60,7 @@ export default function SpeakerStrip({ items = defaultSpeakers }: { items?: Spea
                   src={s.img}
                   alt={s.name}
                   widthClass="w-full"
+                  vAlign={i === 0 ? 'top' : i === 1 ? 'bottom' : 'center'}
                   className="ring-2 ring-transparent group-focus-within:ring-neutral-300 ring-offset-2 transform transition-all duration-200 group-hover:scale-105 shadow-md"
                 >
                   {s.role && (

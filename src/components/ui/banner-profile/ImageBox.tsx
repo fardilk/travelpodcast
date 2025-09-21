@@ -1,4 +1,6 @@
 import React from 'react'
+import { computeStyle } from '@/lib/imageBoxPosition'
+import type { VAlign } from '@/lib/imageBoxPosition'
 
 type ImageBoxProps = {
   src?: string
@@ -8,6 +10,8 @@ type ImageBoxProps = {
   widthClass?: string
   // shape class: rounded-full, rounded-lg, etc.
   shapeClass?: string
+  // vertical alignment for the image content (affects translateY)
+  vAlign?: VAlign
   className?: string
   children?: React.ReactNode
 }
@@ -18,11 +22,14 @@ export default function ImageBox({
   heightClass = 'h-52',
   widthClass = 'w-full',
   shapeClass = 'rounded-xl',
+  vAlign = 'center',
   className = '',
   children,
 }: ImageBoxProps) {
+  const style = computeStyle(vAlign)
+
   return (
-    <div className={`relative overflow-hidden ${widthClass} ${heightClass} ${shapeClass} ring-2 ring-transparent ${className}`}>
+    <div className={`relative overflow-hidden ${widthClass} ${heightClass} ${shapeClass} ring-2 ring-transparent ${className}`} style={style}>
       <img src={src} alt={alt} className="w-full h-full object-cover" />
       {children}
     </div>
