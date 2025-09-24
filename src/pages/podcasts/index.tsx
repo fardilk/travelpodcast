@@ -1,7 +1,7 @@
 import { CategoryGrid } from '@/components/navigation/CategoryGrid'
 
 const podcastThemes = [
-  { title: 'Mountain', href: '/podcasts/mountain', description: 'Stories and conversations from high-altitude adventures.' },
+  { title: 'Pendakian', href: '/podcasts/pendakian', description: 'Stories and conversations from high-altitude adventures.' },
   { title: 'Heritage', href: '/podcasts/heritage', description: 'Exploring cultural heritage and traditions.' },
   { title: 'Socio-Culture', href: '/podcasts/socio-culture', description: 'Social dynamics, communities, and cultural change.' },
 ]

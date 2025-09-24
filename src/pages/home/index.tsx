@@ -38,23 +38,25 @@ function SectionHeader({ eyebrow, title, cta }: { eyebrow?: string; title: strin
 }
 
 function PodcastPreview() {
-	const sample = podcastEpisodes.slice(0, 4)
-	return (
+		const sample = podcastEpisodes.slice(0, 4)
+		return (
 		<div className="mx-auto max-w-6xl px-4">
 			<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-		    {sample.map(ep => (
-					<ImageCard
-						key={ep.id}
-						image={ep.imageUrl}
-						fallbackImage={ep.imageUrl}
-						badge={ep.theme}
-						title={ep.title}
-						subtitle={ep.subtitle}
-			    ctaLabel={<><Headphones className="h-4 w-4" /> Listen</>}
-						ctaHref={`/podcasts/${ep.theme}`}
-						aspect="portrait"
-					/>
-				))}
+						{sample.map(ep => (
+								<ImageCard
+									key={ep.id}
+									image={ep.imageUrl}
+									fallbackImage={ep.imageUrl}
+									badge={ep.theme}
+									title={ep.title}
+									subtitle={ep.subtitle}
+									ctaLabel={<><Headphones className="h-4 w-4" /> Listen</>}
+									ctaHref={`/podcasts/${ep.theme}`}
+									aspect="portrait"
+									imageContainerClassName={ep.theme === 'upcoming' ? 'bg-black' : undefined}
+									imageClassName={ep.theme === 'upcoming' ? 'object-contain p-8' : undefined}
+								/>
+							))}
 			</div>
 		</div>
 	)
@@ -105,7 +107,7 @@ function ArtikelPreview() {
 
 function ShopPreview() {
 	const items = [
-		{ id: 'gear', title: 'Technical Gear', desc: 'Layering, packs, hydration, safety essentials.', img: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=70' },
+		{ id: 'gear', title: 'Technical Gear', desc: 'Layering, packs, hydration, safety essentials.', img: 'https://cdn-fardil-2025.s3.us-east-2.amazonaws.com/ll/pakde-wiro-langkah-liar-profile.png' },
 		{ id: 'media', title: 'Field Media', desc: 'Zines, map prints, narrative audio bundles.', img: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=600&q=70' },
 		{ id: 'artisan', title: 'Artisan Goods', desc: 'Community-made textiles & crafts.', img: 'https://images.unsplash.com/photo-1601046331744-c54e670ac9d4?auto=format&fit=crop&w=600&q=70' }
 	]
@@ -149,7 +151,7 @@ export default function HomePage() {
 			<Meta pageKey="home" />
 			<VideoBanner />
 			<SectionWrapper index={0}>
-			<SectionHeader eyebrow="Listen" title="Latest from the Podcast" cta={<Button variant="outline" size="sm" asChild><a href="/podcasts">All Episodes</a></Button>} />
+			<SectionHeader eyebrow="Listen" title="Tayangan Terbaru" cta={<Button variant="outline" size="sm" asChild><a href="/podcasts">All Episodes</a></Button>} />
 				<PodcastPreview />
 			</SectionWrapper>
 			<SectionWrapper index={1}>

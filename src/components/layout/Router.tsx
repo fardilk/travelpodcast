@@ -8,6 +8,7 @@ import NotFound from '@/pages/NotFound'
 // Lazy-loaded route components
 const PodcastsLanding = lazy(()=>import('@/pages/podcasts'))
 const MountainPodcasts = lazy(()=>import('@/pages/podcasts/mountain'))
+const PendakianPodcasts = lazy(()=>import('@/pages/podcasts/pendakian'))
 const HeritagePodcasts = lazy(()=>import('@/pages/podcasts/heritage'))
 const SocioCulturePodcasts = lazy(()=>import('@/pages/podcasts/socio-culture'))
 const TripsLanding = lazy(()=>import('@/pages/trips'))
@@ -39,6 +40,7 @@ export default function AppRouter() {
               <Route path="/" element={<HomePage />} />
               <Route path="/podcasts" element={<PodcastsLanding />} />
               <Route path="/podcasts/mountain" element={<MountainPodcasts />} />
+              <Route path="/podcasts/pendakian" element={<PendakianPodcasts />} />
               <Route path="/podcasts/heritage" element={<HeritagePodcasts />} />
               <Route path="/podcasts/socio-culture" element={<SocioCulturePodcasts />} />
               <Route path="/trips" element={<TripsLanding />} />

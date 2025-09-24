@@ -2,7 +2,7 @@ import { ItemCard } from '@/components/navigation/ItemCard'
 import { getEpisodesByTheme } from '@/data/podcasts'
 const items = getEpisodesByTheme('pendakian')
 
-export default function MountainPodcasts() {
+export default function PendakianPodcasts() {
   return (
     <main className="mx-auto max-w-6xl px-4 py-16">
       <h1 className="text-3xl font-semibold tracking-tight">Pendakian Podcasts</h1>

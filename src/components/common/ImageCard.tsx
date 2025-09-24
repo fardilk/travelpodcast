@@ -12,6 +12,8 @@ interface ImageCardProps {
   ctaHref?: string
   aspect?: 'portrait' | 'landscape' | 'square'
   className?: string
+  imageContainerClassName?: string
+  imageClassName?: string
 }
 
 const aspectMap: Record<NonNullable<ImageCardProps['aspect']>, string> = {
@@ -20,12 +22,12 @@ const aspectMap: Record<NonNullable<ImageCardProps['aspect']>, string> = {
   square: 'aspect-square'
 }
 
-export function ImageCard({ image, fallbackImage, badge, title, subtitle, ctaLabel = 'Learn more', ctaHref = '#', aspect = 'portrait', className }: ImageCardProps) {
+export function ImageCard({ image, fallbackImage, badge, title, subtitle, ctaLabel = 'Learn more', ctaHref = '#', aspect = 'portrait', className, imageContainerClassName, imageClassName }: ImageCardProps) {
   const [loaded, setLoaded] = React.useState(false)
   const [src, setSrc] = React.useState(image || fallbackImage)
   return (
     <Card className={`group h-full flex flex-col overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 motion-safe:hover:-translate-y-1 ${className || ''}`}>
-      <div className={`relative w-full overflow-hidden bg-muted ${aspectMap[aspect]}`}>
+      <div className={`relative w-full overflow-hidden bg-muted ${aspectMap[aspect]} ${imageContainerClassName || ''}`}>
         {!loaded && <div className="absolute inset-0 animate-pulse bg-muted" />}
         {src && (
           <img
@@ -34,7 +36,7 @@ export function ImageCard({ image, fallbackImage, badge, title, subtitle, ctaLab
             loading="lazy"
             onLoad={() => setLoaded(true)}
             onError={() => { if (fallbackImage && src !== fallbackImage) setSrc(fallbackImage) }}
-            className="h-full w-full object-cover transition-transform duration-500 motion-safe:group-hover:scale-105"
+            className={`h-full w-full object-cover transition-transform duration-500 motion-safe:group-hover:scale-105 ${imageClassName || ''}`}
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
