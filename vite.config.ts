@@ -1,8 +1,10 @@
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { createRequire } from 'node:module'
 import { fileURLToPath, URL } from 'node:url'
 
-// https://vite.dev/config/
+const require = createRequire(import.meta.url)
+const react = require('@vitejs/plugin-react')
+
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -10,4 +12,5 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  base: './', // 🔥 tambahin ini supaya asset path relatif
 })
